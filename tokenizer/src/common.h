@@ -5,6 +5,7 @@
 #include <CGAL/Surface_mesh_simplification/edge_collapse.h>
 #include <Eigen/Dense>
 #include <vector>
+#include <optional>
 
 using Kernel = CGAL::Simple_cartesian<double>;
 using FT = Kernel::FT;

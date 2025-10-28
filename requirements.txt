@@ -1,0 +1,3 @@
+datasets
+trimesh
+vertexregen-tokenizer==0.0.1

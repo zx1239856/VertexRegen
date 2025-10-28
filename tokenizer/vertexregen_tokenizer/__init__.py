@@ -10,6 +10,7 @@ from ._vertexregen_tokenizer_pybind import (
     Stats,
 )
 from .collapse import quantized_edge_collapse
+from .tokenize import tokenize_mesh
 
 __all__ = [
     "__doc__",
@@ -20,4 +21,5 @@ __all__ = [
     "CollapseInfo",
     "Stats",
     "quantized_edge_collapse",
+    "tokenize_mesh",
 ]
