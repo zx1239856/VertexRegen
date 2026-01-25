@@ -1,0 +1,28 @@
+{
+    "name": "VertexRegen AMD Container",
+    "image": "rocm/pytorch:rocm7.1_ubuntu24.04_py3.13_pytorch_release_2.9.1",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-python.black-formatter",
+                "ms-python.isort",
+                "GitHub.copilot",
+                "GitHub.copilot-chat",
+                "ms-toolsai.jupyter",
+                "ms-toolsai.vscode-jupyter-cell-tags",
+                "kiui.mesh-viewer"
+            ]
+        }
+    },
+    "runArgs": [
+        "--cap-add=SYS_PTRACE",
+        "--security-opt=seccomp=unconfined",
+        "--device=/dev/kfd",
+        "--device=/dev/dri",
+        "--group-add=video",
+        "--ipc=host",
+        "--shm-size=1024G"
+    ]
+}

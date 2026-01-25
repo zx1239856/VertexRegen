@@ -3,7 +3,8 @@ import datasets
 import numpy as np
 from vertexregen_tokenizer import quantized_edge_collapse
 from vertexregen_tokenizer.collapse import validate_vertex_split_sequence
-from .utils import load_dataset
+from vertexregen.data import load_dataset
+from vertexregen.decode import cleanup_mesh
 
 
 def create_vertex_split_dataset(examples, no_validation=False, num_pos_tokens=128):
@@ -11,7 +12,7 @@ def create_vertex_split_dataset(examples, no_validation=False, num_pos_tokens=12
         "uid": [],
         "vertices": [],
         "faces": [],
-        "init_vertices": [],
+        "init_vertices_ref": [],
         "init_faces": [],
         "vsplit_seq": [],
     }
@@ -27,11 +28,20 @@ def create_vertex_split_dataset(examples, no_validation=False, num_pos_tokens=12
                 continue
         if len(stats.vsplit_seq) == 0:
             continue
+        init_vertices = np.array(stats.init_vertices).astype(int)
+        init_faces = np.array(stats.init_faces).astype(int)
+        _, cleaned_init_faces = cleanup_mesh(init_vertices, init_faces)
+        if len(cleaned_init_faces) != len(init_faces):
+            continue
         results["uid"].append(uid)
-        results["vertices"].append(np.array(stats.vertices).astype(int))
+        vertices = np.array(stats.vertices).astype(int)
+        results["vertices"].append(vertices)
         results["faces"].append(np.array(stats.faces).astype(int))
-        results["init_vertices"].append(np.array(stats.init_vertices).astype(int))
-        results["init_faces"].append(np.array(stats.init_faces).astype(int))
+        vertex_mapping = {tuple(v): i for i, v in enumerate(vertices)}
+        results["init_vertices_ref"].append(
+            [vertex_mapping[tuple(v)] for v in init_vertices]
+        )
+        results["init_faces"].append(init_faces)
         results["vsplit_seq"].append(np.array(stats.vsplit_seq).astype(int))
     return results
 
@@ -100,9 +110,9 @@ def main():
                 "faces": datasets.Sequence(
                     datasets.Sequence(datasets.Value("int32"), length=3)
                 ),  # faces of original mesh
-                "init_vertices": datasets.Sequence(
-                    datasets.Sequence(datasets.Value("int32"), length=3)
-                ),  # vertices of simplified mesh M_0
+                "init_vertices_ref": datasets.Sequence(
+                    datasets.Value("int32"), length=-1
+                ),  # vertex references of simplified mesh M_0
                 "init_faces": datasets.Sequence(
                     datasets.Sequence(datasets.Value("int32"), length=3)
                 ),  # faces of simplified mesh M_0

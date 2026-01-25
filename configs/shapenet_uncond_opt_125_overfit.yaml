@@ -1,0 +1,62 @@
+all:
+  output_dir: outputs/vertexregen_shapenet_uncond_opt_125_overfit
+  sub_dir: ${oc.env:RUN_TS}
+
+hydra:
+  job:
+    env_set:
+      OMP_NUM_THREADS: 1
+  run:
+    dir: ${all.output_dir}/${all.sub_dir}/hydra
+
+model:
+  vocab_size: 160
+  num_pos_tokens: 128
+  pad_token_id: 0
+  bos_token_id: 1
+  eos_token_id: 2
+  sep_token_id: 3
+  nil_token_id: 4
+  pos_token_offset: 5
+  path: "facebook/opt-125m"
+  max_seq_length: 8192
+  attn_implementation: flash_attention_2
+
+data:
+  path: dataset/collapsed_shapenet_q128
+  num_pos_tokens: ${model.num_pos_tokens}
+  overfit: True
+
+train:
+  train_args:
+    output_dir: ${all.output_dir}/${all.sub_dir}/checkpoints
+    logging_dir: ${all.output_dir}/${all.sub_dir}/logs
+    report_to: tensorboard
+    eval_strategy: steps
+    save_strategy: steps
+    logging_strategy: steps
+    logging_steps: 1
+    per_device_train_batch_size: 4
+    per_device_eval_batch_size: 4
+    gradient_accumulation_steps: 1
+    learning_rate: 1e-4
+    weight_decay: 0.1
+    adam_beta1: 0.9
+    adam_beta2: 0.95
+    max_grad_norm: 1.0
+    max_steps: 500
+    lr_scheduler_type: warmup_stable_decay
+    lr_scheduler_kwargs:
+      num_stable_steps: 0
+      num_decay_steps: 500
+      min_lr_ratio: 0.1
+    warmup_steps: 0
+    save_steps: 100
+    eval_steps: 100
+    dataloader_num_workers: 8
+    dataloader_prefetch_factor: 2
+    dataloader_persistent_workers: True
+    ddp_find_unused_parameters: False
+    gradient_checkpointing: True
+    gradient_checkpointing_kwargs:
+      use_reentrant: False

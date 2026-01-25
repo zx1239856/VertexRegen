@@ -1,0 +1,9 @@
+defaults:
+  - shapenet_uncond_opt_125_overfit
+  - _self_
+
+all:
+  output_dir: outputs/vertexregen_shapenet_uncond_opt_350_overfit
+
+model:
+  path: "facebook/opt-350m"
