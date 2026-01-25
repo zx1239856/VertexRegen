@@ -251,8 +251,14 @@ namespace vr_tokenizer::cgal
       {
         // We use CW boundary as h1
         auto h1 = h2;
-        for (; !mesh.is_border(h1); h1 = mesh.next_around_target(h1))
-          ;
+        while (!mesh.is_border(h1))
+        {
+          h1 = mesh.next_around_target(h1);
+          if (h1 == h2)
+            break;
+        }
+        if (!mesh.is_border(h1))
+          return std::nullopt;
         if (h1 == h2)
         {
           // In this case, all neighbors are around v_t. We can just move v_s to v_t location
@@ -277,6 +283,7 @@ namespace vr_tokenizer::cgal
     else if (v_r_.has_value())
     {
       auto h2 = mesh.halfedge(*v_r_, v_s_);
+      auto h2_init = h2;
       assert_hedge_valid(h2, mesh, "Invalid vR");
       auto h1_next = mesh.opposite(h2);
       if (mesh.is_border(h1_next))
@@ -291,7 +298,14 @@ namespace vr_tokenizer::cgal
       else
       {
         auto h1 = mesh.prev(h1_next);
-        for (; !mesh.is_border(h2); h2 = mesh.next_around_target(h2));
+        while (!mesh.is_border(h2))
+        {
+          h2 = mesh.next_around_target(h2);
+          if (h2 == h2_init)
+            break;
+        }
+        if (!mesh.is_border(h2))
+          return std::nullopt;
         auto h_new = CGAL::Euler::split_vertex(h1, h2, mesh);
         auto h_new_opp = mesh.opposite(h_new);
         auto v_t_ = mesh.source(h_new);

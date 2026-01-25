@@ -55,6 +55,8 @@ class Decoder:
         v_s_i = self.vertex_map.get(tuple(v_s_p), -1)
         v_l_i = self.vertex_map.get(tuple(v_l_p), -1) if v_l_p is not None else None
         v_r_i = self.vertex_map.get(tuple(v_r_p), -1) if v_r_p is not None else None
+        if tuple(v_t_p) in self.vertex_map:
+            return False
         if -1 in [v_s_i, v_l_i, v_r_i]:
             return False
         try:
