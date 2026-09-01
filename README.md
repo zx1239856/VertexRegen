@@ -5,7 +5,11 @@
 [![arXiv](https://img.shields.io/badge/📚-arXiv-b31b1b)](https://arxiv.org/abs/2508.09062)
 [![PyPI](https://img.shields.io/badge/PyPI-vertexregen--tokenizer-blue)](https://pypi.org/project/vertexregen-tokenizer/)
 
-> **Unofficial implementation** of the ICCV 2025 paper *VertexRegen: Mesh Generation with Continuous Level of Detail*.
+**[Xiang Zhang](https://xzhang.dev)**, Yawar Siddiqui, Armen Avetisyan, Chris Xie, Jakob Engel, Henry Howard-Jenkins
+
+*ICCV 2025*
+
+> **Author's re-implementation.** This repository is written and maintained by the paper's first author. The original research implementation is not publicly available, so this independent re-implementation exists to keep the method usable by the community.
 
 ![Teaser](https://vertexregen.github.io/static/images/teaser.webp)
 
@@ -13,7 +17,7 @@
 
 ## 📖 Overview
 
-**VertexRegen** is a mesh generation framework that supports **continuous levels of detail (LoD)**, enabling smooth transitions across mesh resolutions. This repository provides an end-to-end re-implementation of the original paper, including:
+**VertexRegen** is a mesh generation framework that supports **continuous levels of detail (LoD)**, enabling smooth transitions across mesh resolutions. This repository provides an end-to-end re-implementation of the method, including:
 
 * Dataset preprocessing and vertex-split generation
 * Mesh tokenization
@@ -120,7 +124,7 @@ This repository is released under the [MIT](LICENSE) license.
 
 ## 🪶 Citation
 
-If you find this repository useful, please cite the original paper:
+If you find this repository useful, please cite the paper:
 
 ```bibtex
 @InProceedings{Zhang_2025_ICCV_VertexRegen,
